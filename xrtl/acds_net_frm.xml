@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XRTL version="1.0"
+      title="Состояние сетевых устройств">
+
+  <Resources>
+
+    <Database username="CHANGEME"
+              password="CHANGEME"
+              provider="MSDAORA"
+              data_source="CHANGEME"/>
+
+    <Queries>
+
+      <Query name="net_devices" auto_open="true">
+
+        SELECT
+          device_id,
+          device_ip,
+          device_name,
+          device_description,
+          device_status,
+          last_updated,
+          coordinate_x,
+          coordinate_y
+        FROM
+          acds.net_devices@utl
+        ORDER BY
+          device_id;
+
+        <Field name="device_id"/>
+        <Field name="device_ip"/>
+        <Field name="device_name"/>
+        <Field name="device_description"/>
+        <Field name="device_status"/>
+        <Field name="last_updated"/>
+        <Field name="coordinate_x"/>
+        <Field name="coordinate_y"/>
+
+        <UpdateQuery>
+          UPDATE
+            acds.net_devices@utl
+          SET
+            device_ip = :New_device_ip,
+            device_name = :New_device_name,
+            device_description = :New_device_description,
+            coordinate_x = :New_coordinate_x,
+            coordinate_y = :New_coordinate_y
+          WHERE
+            device_id = :Old_device_id;
+        </UpdateQuery>
+
+        <InsertQuery>
+          INSERT INTO
+            acds.net_devices@utl (
+              device_ip,
+              device_name,
+              device_description,
+              coordinate_x,
+              coordinate_y
+            )
+          VALUES (
+            :New_device_ip,
+            :New_device_name,
+            :New_device_description,
+            :New_coordinate_x,
+            :New_coordinate_y
+          );
+        </InsertQuery>
+
+        <DeleteQuery>
+          DELETE FROM acds.net_devices@utl WHERE device_id = :Old_device_id;
+        </DeleteQuery>
+
+      </Query>
+
+    </Queries>
+
+  </Resources>
+
+  <Window caption="Состояние сетевых устройств"
+          width="1270"
+          height="600">
+
+      <GroupBox caption="Справка"
+                left="5"
+                right="5"
+                top="5"
+                height="50"
+                layout="flow">
+
+        <Label caption="Сервис опрашивает сетевые устройства каждые 60 секунд, максимальное ожидание ответа 5 с. Статусы: Live - пинг прошел, Dead - пинг не прошел."/>
+
+      </GroupBox>
+
+      <GroupBox caption="Сетевое устройство"
+                left="5"
+                right="5"
+                top="55"
+                height="50"
+                layout="flow">
+
+        <Label caption="IP-адрес" width="40"/>
+        <Edit query="net_devices"
+              field="device_ip"/>
+
+        <Label caption="Имя устройства" width="80"/>
+        <Edit query="net_devices"
+              field="device_name"/>
+
+        <Label caption="Описание" width="50"/>
+        <Edit query="net_devices"
+              field="device_description"/>
+
+        <Label caption="Координата X" width="70"/>
+        <Edit query="net_devices"
+              field="coordinate_x"/>
+
+        <Label caption="Координата Y" width="70"/>
+        <Edit query="net_devices"
+              field="coordinate_y"/>
+
+      </GroupBox>
+
+      <Grid query="net_devices"
+            read_only="true"
+            left="5"
+            right="5"
+            top="120"
+            bottom="42">
+
+        <Column field="device_ip"
+                caption="IP-адрес"/>
+
+        <Column field="device_name"
+                caption="Имя устройства"
+                width="255"/>
+
+        <Column field="device_description"
+                caption="Описание"
+                width="255"/>
+
+        <Column field="device_status"
+                caption="Статус"/>
+
+        <Column field="last_updated"
+                caption="Дата статуса"/>
+
+        <Column field="coordinate_x"
+                caption="Координата X"/>
+
+        <Column field="coordinate_y"
+                caption="Координата Y"/>
+
+
+      </Grid>
+
+      <DataNavigator refresh="true"
+                     post="true"
+                     delete="true"
+                     add="true"
+                     edit="true"
+                     query="net_devices"
+                     left="5"
+                     bottom="10"
+                     width="250"
+                     height="20"/>
+
+  </Window>
+
+</XRTL>

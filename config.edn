@@ -1,0 +1,26 @@
+{:utl
+  {:username           "utldisp"
+   :password           "utility"
+   :server-name        "10.172.187.30"
+   :database-name      "utl"
+   :port-number        1521
+   :driverType         "thin"
+   :adapter            "oracle"
+   :pool-name          "UTL db connection pool"
+   :auto-commit        true
+   :connection-timeout 30000
+   :validation-timeout 5000
+   :idle-timeout       600000
+   :max-lifetime       1800000
+   :minimum-idle       1
+   :maximum-pool-size  1}
+
+ :log
+  {:timestamp "dd.MM.yyyy HH:mm:ss"
+   :path      "logs/app.log"
+   :rotation  :daily
+   :level     :info}
+
+ :ping
+  {:timeout 5000
+   :period  60000}}
